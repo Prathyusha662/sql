@@ -1,0 +1,492 @@
+Microsoft Windows [Version 10.0.19042.804]
+(c) 2020 Microsoft Corporation. All rights reserved.
+
+C:\Users\Prathush>mysql -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.21 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database employ
+    -> ;
+Query OK, 1 row affected (0.44 sec)
+
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| cosemetics         |
+| create             |
+| emp                |
+| employ             |
+| employee           |
+| hash               |
+| information_schema |
+| matrimony          |
+| matrimonybg        |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| trv11              |
+| tv11               |
+| world              |
+| xworkz             |
++--------------------+
+17 rows in set (0.24 sec)
+
+mysql> use employ
+Database changed
+mysql> create table depart(
+    -> deptno int not null,
+    -> dname varchar(50) not null,
+    -> location varchar(50) not null);
+Query OK, 0 rows affected (1.20 sec)
+
+mysql> desc  depart;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| deptno   | int         | NO   |     | NULL    |       |
+| dname    | varchar(50) | NO   |     | NULL    |       |
+| location | varchar(50) | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.10 sec)
+
+mysql> create table emp(
+    -> empno int not null primary key,
+    -> ename varchar(50) not null ,
+    -> job varchar(50) not null,
+    -> mgr  int ,
+    -> hiredate date,
+    -> sal decimal(10,2),
+    -> comm decimal(10,2),
+    -> deptno int not null,
+    -> foreign key(deptno) references depart (deptno));
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'emp_ibfk_1' in the referenced table 'depart'
+mysql> alter table depart modify column deptno int primary key not null;
+Query OK, 0 rows affected (1.24 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc depart;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| deptno   | int         | NO   | PRI | NULL    |       |
+| dname    | varchar(50) | NO   |     | NULL    |       |
+| location | varchar(50) | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.07 sec)
+
+mysql> create table emp(
+    -> empno int not null primary key,
+    -> ename varchar(50) not null ,
+    -> job varchar(50) not null,
+    -> mgr  int ,
+    -> hiredate date,
+    -> sal decimal(10,2),
+    -> comm decimal(10,2),
+    -> deptno int not null,
+    -> foreign key(deptno) references depart (deptno));
+Query OK, 0 rows affected (1.80 sec)
+
+mysql> desc emp;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| empno    | int           | NO   | PRI | NULL    |       |
+| ename    | varchar(50)   | NO   |     | NULL    |       |
+| job      | varchar(50)   | NO   |     | NULL    |       |
+| mgr      | int           | YES  |     | NULL    |       |
+| hiredate | date          | YES  |     | NULL    |       |
+| sal      | decimal(10,2) | YES  |     | NULL    |       |
+| comm     | decimal(10,2) | YES  |     | NULL    |       |
+| deptno   | int           | NO   | MUL | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+8 rows in set (0.07 sec)
+
+mysql> insert into depart values (10,'Accounting','new york'),
+    -> (20,'research','dallas'),
+    -> (30,'sales','chicago'),
+    -> (40,'operations','boston'),
+    -> (50,'production','india'),
+    -> (60,'marketing','banglore'),
+    -> (70,'finance','mumbai'));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 7
+mysql> insert into depart values (10,'Accounting','new york'),
+    -> (20,'research','dallas'),
+    -> (30,'sales','chicago'),
+    -> (40,'operations','boston'),
+    -> (50,'production','india'),
+    -> (60,'marketing','banglore'),
+    -> (70,'finance','mumbai');
+Query OK, 7 rows affected (0.24 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select* from depart;
++--------+------------+----------+
+| deptno | dname      | location |
++--------+------------+----------+
+|     10 | Accounting | new york |
+|     20 | research   | dallas   |
+|     30 | sales      | chicago  |
+|     40 | operations | boston   |
+|     50 | production | india    |
+|     60 | marketing  | banglore |
+|     70 | finance    | mumbai   |
++--------+------------+----------+
+7 rows in set (0.00 sec)
+
+mysql> insert into emp values (7000,'John','manager',7698,'2020-06-18',2500.00,NULL,50),
+    -> (7002,'Sham','manager',7698,'2020-06-18',2500.00,NULL,50),
+    -> (7004,'Ravi','Clerck',7782,'2000-12-12',500.00,NULL,50),
+    -> (7369,'Smith','Clerk',7902,'1993-06-13',800.00,0.00,20),
+    -> (7499,'Allen','SalesMan',7698,'1998-08-15',1600.00,300.00,30),
+    -> (7521,'Ward','Salesman',7698,'1996-03-26',1250.00,500.00,30),
+    -> (7566,'Jones','manager',7839,'1995-10-31',2975.00,NULL,20),
+    -> (7654,'Martin','Salesman',7698,'1998-12-05',1250.00,1400.00,30),
+    -> (7698,'Blake','manager',7839,'1992-06-11',2850.00,NULL,30),
+    -> (7782,'Clark','manager',7839,'1993-05-14',2450.00,NULL,10),
+    -> (7788,'Scott','Analyst',7566,'1996-03-04',3000.00,NULL,20),
+    -> (7839,'King','President',NULL,'1990-06-09',5000.00,0.00,10),
+    -> (7844,'Turner','Salesman',7698,'1995-06-04',1500.00,0.00,30),
+    -> (7876,'Adams','Clerk',7788,'1999-06-04',1100.00,NULL,20),
+    -> (7900,'James','Clerk',7698,'2000-06-23',950.00,NULL,30),
+    -> (7902,'Ford','Aanalyst',7566,'1997-12-05',3000.00,NULL,20),
+    -> (7934,'Miller','Clerk',7782,'2000-01-21',1300.00,NULL,10);
+Query OK, 17 rows affected (0.20 sec)
+Records: 17  Duplicates: 0  Warnings: 0
+
+mysql> select* from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7000 | John   | manager   | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7002 | Sham   | manager   | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7004 | Ravi   | Clerck    | 7782 | 2000-12-12 |  500.00 |    NULL |     50 |
+|  7369 | Smith  | Clerk     | 7902 | 1993-06-13 |  800.00 |    0.00 |     20 |
+|  7499 | Allen  | SalesMan  | 7698 | 1998-08-15 | 1600.00 |  300.00 |     30 |
+|  7521 | Ward   | Salesman  | 7698 | 1996-03-26 | 1250.00 |  500.00 |     30 |
+|  7566 | Jones  | manager   | 7839 | 1995-10-31 | 2975.00 |    NULL |     20 |
+|  7654 | Martin | Salesman  | 7698 | 1998-12-05 | 1250.00 | 1400.00 |     30 |
+|  7698 | Blake  | manager   | 7839 | 1992-06-11 | 2850.00 |    NULL |     30 |
+|  7782 | Clark  | manager   | 7839 | 1993-05-14 | 2450.00 |    NULL |     10 |
+|  7788 | Scott  | Analyst   | 7566 | 1996-03-04 | 3000.00 |    NULL |     20 |
+|  7839 | King   | President | NULL | 1990-06-09 | 5000.00 |    0.00 |     10 |
+|  7844 | Turner | Salesman  | 7698 | 1995-06-04 | 1500.00 |    0.00 |     30 |
+|  7876 | Adams  | Clerk     | 7788 | 1999-06-04 | 1100.00 |    NULL |     20 |
+|  7900 | James  | Clerk     | 7698 | 2000-06-23 |  950.00 |    NULL |     30 |
+|  7902 | Ford   | Aanalyst  | 7566 | 1997-12-05 | 3000.00 |    NULL |     20 |
+|  7934 | Miller | Clerk     | 7782 | 2000-01-21 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql>select * from emp where deptno between 10 or 50;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'or 50
+' at line 1
+mysql> select * from emp where deptno between 10 and 50;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7000 | John   | manager   | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7002 | Sham   | manager   | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7004 | Ravi   | Clerck    | 7782 | 2000-12-12 |  500.00 |    NULL |     50 |
+|  7369 | Smith  | Clerk     | 7902 | 1993-06-13 |  800.00 |    0.00 |     20 |
+|  7499 | Allen  | SalesMan  | 7698 | 1998-08-15 | 1600.00 |  300.00 |     30 |
+|  7521 | Ward   | Salesman  | 7698 | 1996-03-26 | 1250.00 |  500.00 |     30 |
+|  7566 | Jones  | manager   | 7839 | 1995-10-31 | 2975.00 |    NULL |     20 |
+|  7654 | Martin | Salesman  | 7698 | 1998-12-05 | 1250.00 | 1400.00 |     30 |
+|  7698 | Blake  | manager   | 7839 | 1992-06-11 | 2850.00 |    NULL |     30 |
+|  7782 | Clark  | manager   | 7839 | 1993-05-14 | 2450.00 |    NULL |     10 |
+|  7788 | Scott  | Analyst   | 7566 | 1996-03-04 | 3000.00 |    NULL |     20 |
+|  7839 | King   | President | NULL | 1990-06-09 | 5000.00 |    0.00 |     10 |
+|  7844 | Turner | Salesman  | 7698 | 1995-06-04 | 1500.00 |    0.00 |     30 |
+|  7876 | Adams  | Clerk     | 7788 | 1999-06-04 | 1100.00 |    NULL |     20 |
+|  7900 | James  | Clerk     | 7698 | 2000-06-23 |  950.00 |    NULL |     30 |
+|  7902 | Ford   | Aanalyst  | 7566 | 1997-12-05 | 3000.00 |    NULL |     20 |
+|  7934 | Miller | Clerk     | 7782 | 2000-01-21 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select * from emp where ename like %n;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near '%n' a
+t line 1
+mysql> select * from emp where ename like '%n';
++-------+--------+----------+------+------------+---------+---------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7000 | John   | manager  | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7499 | Allen  | SalesMan | 7698 | 1998-08-15 | 1600.00 |  300.00 |     30 |
+|  7654 | Martin | Salesman | 7698 | 1998-12-05 | 1250.00 | 1400.00 |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp where ename like %0;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near '%0' a
+t line 1
+mysql> select * from emp where ename like '%0';
+Empty set (0.00 sec)
+
+mysql> select * from emp where deptno like '%0';
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7000 | John   | manager   | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7002 | Sham   | manager   | 7698 | 2020-06-18 | 2500.00 |    NULL |     50 |
+|  7004 | Ravi   | Clerck    | 7782 | 2000-12-12 |  500.00 |    NULL |     50 |
+|  7369 | Smith  | Clerk     | 7902 | 1993-06-13 |  800.00 |    0.00 |     20 |
+|  7499 | Allen  | SalesMan  | 7698 | 1998-08-15 | 1600.00 |  300.00 |     30 |
+|  7521 | Ward   | Salesman  | 7698 | 1996-03-26 | 1250.00 |  500.00 |     30 |
+|  7566 | Jones  | manager   | 7839 | 1995-10-31 | 2975.00 |    NULL |     20 |
+|  7654 | Martin | Salesman  | 7698 | 1998-12-05 | 1250.00 | 1400.00 |     30 |
+|  7698 | Blake  | manager   | 7839 | 1992-06-11 | 2850.00 |    NULL |     30 |
+|  7782 | Clark  | manager   | 7839 | 1993-05-14 | 2450.00 |    NULL |     10 |
+|  7788 | Scott  | Analyst   | 7566 | 1996-03-04 | 3000.00 |    NULL |     20 |
+|  7839 | King   | President | NULL | 1990-06-09 | 5000.00 |    0.00 |     10 |
+|  7844 | Turner | Salesman  | 7698 | 1995-06-04 | 1500.00 |    0.00 |     30 |
+|  7876 | Adams  | Clerk     | 7788 | 1999-06-04 | 1100.00 |    NULL |     20 |
+|  7900 | James  | Clerk     | 7698 | 2000-06-23 |  950.00 |    NULL |     30 |
+|  7902 | Ford   | Aanalyst  | 7566 | 1997-12-05 | 3000.00 |    NULL |     20 |
+|  7934 | Miller | Clerk     | 7782 | 2000-01-21 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select * from emp where mgr like '%9';
++-------+-------+---------+------+------------+---------+------+--------+
+| empno | ename | job     | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7566 | Jones | manager | 7839 | 1995-10-31 | 2975.00 | NULL |     20 |
+|  7698 | Blake | manager | 7839 | 1992-06-11 | 2850.00 | NULL |     30 |
+|  7782 | Clark | manager | 7839 | 1993-05-14 | 2450.00 | NULL |     10 |
++-------+-------+---------+------+------------+---------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp where ename like '--e%';
+Empty set (0.00 sec)
+
+mysql> select * from emp where job like '--e%';
+Empty set (0.00 sec)
+
+mysql> select * from emp where job like '__e%';
++-------+--------+-----------+------+------------+---------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm | deptno |
++-------+--------+-----------+------+------------+---------+------+--------+
+|  7004 | Ravi   | Clerck    | 7782 | 2000-12-12 |  500.00 | NULL |     50 |
+|  7369 | Smith  | Clerk     | 7902 | 1993-06-13 |  800.00 | 0.00 |     20 |
+|  7839 | King   | President | NULL | 1990-06-09 | 5000.00 | 0.00 |     10 |
+|  7876 | Adams  | Clerk     | 7788 | 1999-06-04 | 1100.00 | NULL |     20 |
+|  7900 | James  | Clerk     | 7698 | 2000-06-23 |  950.00 | NULL |     30 |
+|  7934 | Miller | Clerk     | 7782 | 2000-01-21 | 1300.00 | NULL |     10 |
++-------+--------+-----------+------+------------+---------+------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from emp where job like '%l%';
++-------+--------+----------+------+------------+---------+---------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7004 | Ravi   | Clerck   | 7782 | 2000-12-12 |  500.00 |    NULL |     50 |
+|  7369 | Smith  | Clerk    | 7902 | 1993-06-13 |  800.00 |    0.00 |     20 |
+|  7499 | Allen  | SalesMan | 7698 | 1998-08-15 | 1600.00 |  300.00 |     30 |
+|  7521 | Ward   | Salesman | 7698 | 1996-03-26 | 1250.00 |  500.00 |     30 |
+|  7654 | Martin | Salesman | 7698 | 1998-12-05 | 1250.00 | 1400.00 |     30 |
+|  7788 | Scott  | Analyst  | 7566 | 1996-03-04 | 3000.00 |    NULL |     20 |
+|  7844 | Turner | Salesman | 7698 | 1995-06-04 | 1500.00 |    0.00 |     30 |
+|  7876 | Adams  | Clerk    | 7788 | 1999-06-04 | 1100.00 |    NULL |     20 |
+|  7900 | James  | Clerk    | 7698 | 2000-06-23 |  950.00 |    NULL |     30 |
+|  7902 | Ford   | Aanalyst | 7566 | 1997-12-05 | 3000.00 |    NULL |     20 |
+|  7934 | Miller | Clerk    | 7782 | 2000-01-21 | 1300.00 |    NULL |     10 |
++-------+--------+----------+------+------------+---------+---------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select * from emp where job like 'A__%t';
++-------+-------+----------+------+------------+---------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+----------+------+------------+---------+------+--------+
+|  7788 | Scott | Analyst  | 7566 | 1996-03-04 | 3000.00 | NULL |     20 |
+|  7902 | Ford  | Aanalyst | 7566 | 1997-12-05 | 3000.00 | NULL |     20 |
++-------+-------+----------+------+------------+---------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from emp where job IN ('50','20');
+Empty set (0.00 sec)
+
+mysql> select * from emp where deptno IN ('50','20');
++-------+-------+----------+------+------------+---------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+----------+------+------------+---------+------+--------+
+|  7369 | Smith | Clerk    | 7902 | 1993-06-13 |  800.00 | 0.00 |     20 |
+|  7566 | Jones | manager  | 7839 | 1995-10-31 | 2975.00 | NULL |     20 |
+|  7788 | Scott | Analyst  | 7566 | 1996-03-04 | 3000.00 | NULL |     20 |
+|  7876 | Adams | Clerk    | 7788 | 1999-06-04 | 1100.00 | NULL |     20 |
+|  7902 | Ford  | Aanalyst | 7566 | 1997-12-05 | 3000.00 | NULL |     20 |
+|  7000 | John  | manager  | 7698 | 2020-06-18 | 2500.00 | NULL |     50 |
+|  7002 | Sham  | manager  | 7698 | 2020-06-18 | 2500.00 | NULL |     50 |
+|  7004 | Ravi  | Clerck   | 7782 | 2000-12-12 |  500.00 | NULL |     50 |
++-------+-------+----------+------+------------+---------+------+--------+
+8 rows in set (0.00 sec)
+
+mysql> desc emp;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| empno    | int           | NO   | PRI | NULL    |       |
+| ename    | varchar(50)   | NO   |     | NULL    |       |
+| job      | varchar(50)   | NO   |     | NULL    |       |
+| mgr      | int           | YES  |     | NULL    |       |
+| hiredate | date          | YES  |     | NULL    |       |
+| sal      | decimal(10,2) | YES  |     | NULL    |       |
+| comm     | decimal(10,2) | YES  |     | NULL    |       |
+| deptno   | int           | NO   | MUL | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+8 rows in set (0.05 sec)
+
+mysql> select ename,comm from emp where comm='null';
++--------+------+
+| ename  | comm |
++--------+------+
+| Smith  | 0.00 |
+| King   | 0.00 |
+| Turner | 0.00 |
++--------+------+
+3 rows in set, 1 warning (0.00 sec)
+
+mysql> select * from min(empno) from emp where empno>7800;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'min(e
+mpno) from emp where empno>7800' at line 1
+mysql> select * from emp where ename like '_____';
++-------+-------+----------+------+------------+---------+--------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal     | comm   | deptno |
++-------+-------+----------+------+------------+---------+--------+--------+
+|  7369 | Smith | Clerk    | 7902 | 1993-06-13 |  800.00 |   0.00 |     20 |
+|  7499 | Allen | SalesMan | 7698 | 1998-08-15 | 1600.00 | 300.00 |     30 |
+|  7566 | Jones | manager  | 7839 | 1995-10-31 | 2975.00 |   NULL |     20 |
+|  7698 | Blake | manager  | 7839 | 1992-06-11 | 2850.00 |   NULL |     30 |
+|  7782 | Clark | manager  | 7839 | 1993-05-14 | 2450.00 |   NULL |     10 |
+|  7788 | Scott | Analyst  | 7566 | 1996-03-04 | 3000.00 |   NULL |     20 |
+|  7876 | Adams | Clerk    | 7788 | 1999-06-04 | 1100.00 |   NULL |     20 |
+|  7900 | James | Clerk    | 7698 | 2000-06-23 |  950.00 |   NULL |     30 |
++-------+-------+----------+------+------------+---------+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select ename,job,empno from emp;
++--------+-----------+-------+
+| ename  | job       | empno |
++--------+-----------+-------+
+| John   | manager   |  7000 |
+| Sham   | manager   |  7002 |
+| Ravi   | Clerck    |  7004 |
+| Smith  | Clerk     |  7369 |
+| Allen  | SalesMan  |  7499 |
+| Ward   | Salesman  |  7521 |
+| Jones  | manager   |  7566 |
+| Martin | Salesman  |  7654 |
+| Blake  | manager   |  7698 |
+| Clark  | manager   |  7782 |
+| Scott  | Analyst   |  7788 |
+| King   | President |  7839 |
+| Turner | Salesman  |  7844 |
+| Adams  | Clerk     |  7876 |
+| James  | Clerk     |  7900 |
+| Ford   | Aanalyst  |  7902 |
+| Miller | Clerk     |  7934 |
++--------+-----------+-------+
+17 rows in set (0.00 sec)
+
+mysql> select count(*)
+    -> from emp
+    -> where deptno=30;
++----------+
+| count(*) |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*)
+    -> ffrom emp
+    ->
+    -> from emp
+    -> where empno=7698;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'emp
+
+from emp
+where empno=7698' at line 2
+mysql> select count(*)
+    -> from emp
+    -> where empno=7698;
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp
+    -> where ename not like 'm%';
++-------+--------+-----------+------+------------+---------+--------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm   | deptno |
++-------+--------+-----------+------+------------+---------+--------+--------+
+|  7000 | John   | manager   | 7698 | 2020-06-18 | 2500.00 |   NULL |     50 |
+|  7002 | Sham   | manager   | 7698 | 2020-06-18 | 2500.00 |   NULL |     50 |
+|  7004 | Ravi   | Clerck    | 7782 | 2000-12-12 |  500.00 |   NULL |     50 |
+|  7369 | Smith  | Clerk     | 7902 | 1993-06-13 |  800.00 |   0.00 |     20 |
+|  7499 | Allen  | SalesMan  | 7698 | 1998-08-15 | 1600.00 | 300.00 |     30 |
+|  7521 | Ward   | Salesman  | 7698 | 1996-03-26 | 1250.00 | 500.00 |     30 |
+|  7566 | Jones  | manager   | 7839 | 1995-10-31 | 2975.00 |   NULL |     20 |
+|  7698 | Blake  | manager   | 7839 | 1992-06-11 | 2850.00 |   NULL |     30 |
+|  7782 | Clark  | manager   | 7839 | 1993-05-14 | 2450.00 |   NULL |     10 |
+|  7788 | Scott  | Analyst   | 7566 | 1996-03-04 | 3000.00 |   NULL |     20 |
+|  7839 | King   | President | NULL | 1990-06-09 | 5000.00 |   0.00 |     10 |
+|  7844 | Turner | Salesman  | 7698 | 1995-06-04 | 1500.00 |   0.00 |     30 |
+|  7876 | Adams  | Clerk     | 7788 | 1999-06-04 | 1100.00 |   NULL |     20 |
+|  7900 | James  | Clerk     | 7698 | 2000-06-23 |  950.00 |   NULL |     30 |
+|  7902 | Ford   | Aanalyst  | 7566 | 1997-12-05 | 3000.00 |   NULL |     20 |
++-------+--------+-----------+------+------------+---------+--------+--------+
+15 rows in set (0.00 sec)
+
+mysql> select max(sal),min(sal),sum(sal),avg(sal),count(*) from emp;
++----------+----------+----------+-------------+----------+
+| max(sal) | min(sal) | sum(sal) | avg(sal)    | count(*) |
++----------+----------+----------+-------------+----------+
+|  5000.00 |   500.00 | 34525.00 | 2030.882353 |       17 |
++----------+----------+----------+-------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select sum(sal) from emp group by deptno;
++----------+
+| sum(sal) |
++----------+
+|  8750.00 |
+| 10875.00 |
+|  9400.00 |
+|  5500.00 |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select deptno,sum(sal) from emp
+    -> group by deptno;
++--------+----------+
+| deptno | sum(sal) |
++--------+----------+
+|     10 |  8750.00 |
+|     20 | 10875.00 |
+|     30 |  9400.00 |
+|     50 |  5500.00 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql>
